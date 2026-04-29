@@ -51,7 +51,7 @@ docker compose exec ir-dev uv add <pkg_name>
 
 this command updates `pyproject.toml` and `uv.lock` locally 
 
-after commiting these files, a team member can `git pull` these new added dependencies and then rebuild the container with:
+after commiting these files, a team member can `git pull` these new added dependencies and then rebuild their container with:
 
 ```
 docker compose up -d build
