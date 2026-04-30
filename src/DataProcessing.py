@@ -17,7 +17,7 @@ def tokenizer(text):
     text = re.sub(r'[^\w\s]', '', text.lower())
     return [t for t in text.split() if t not in ENGLISH_STOP_WORDS] 
 
-class ProcessesData:
+class DataProcessing:
     def __init__(self, DATA_DIR="dataset"):
         """Creates document, query, and relevance dataframe.
 

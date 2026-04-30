@@ -1,5 +1,5 @@
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
-from ProcessesData import tokenizer
+from src.DataProcessing import tokenizer
 from rank_bm25 import BM25Okapi
 import pandas as pd
 import re

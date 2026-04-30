@@ -1,4 +1,4 @@
-from ProcessesData import tokenizer
+from src.DataProcessing import tokenizer
 from collections import defaultdict
 import math
 import re
