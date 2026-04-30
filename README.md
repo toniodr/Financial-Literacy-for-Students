@@ -16,10 +16,6 @@
 
 #### 1. Clone the Repo
 
-#### 2. Add the Dataset 
-
-create a new `data/` folder and add the provided JSON dataset files from canvas
-
 #### 3. Start the Environment 
 
 ```
