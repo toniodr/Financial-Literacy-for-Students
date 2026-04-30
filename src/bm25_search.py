@@ -1,12 +1,13 @@
-import re
-import pandas as pd
-from rank_bm25 import BM25Okapi
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
+from ProcessesData import tokenizer
+from rank_bm25 import BM25Okapi
+import pandas as pd
+import re
 
 class BM25Search:
     def __init__(self, docs, relevance):
         self.doc_ids = docs['doc_id'].tolist()
-        self.tokenized_docs = [self.tokenizer(doc) for doc in docs['text']]
+        self.tokenized_docs = [tokenizer(doc) for doc in docs['text']]
         self.bm25 = BM25Okapi(self.tokenized_docs)
         self.ap_scores = {}
         self.sorted_ap = []
@@ -17,10 +18,6 @@ class BM25Search:
             .apply(set)
             .to_dict()
         )
-
-    def tokenizer(self, text):
-        text = re.sub(r'[^\w\s]', '', text.lower())
-        return [t for t in text.split() if t not in ENGLISH_STOP_WORDS]
 
     def _compute_ap(self, ranked_indices, relevant_doc_ids):
         total_rel = len(relevant_doc_ids)
@@ -36,7 +33,7 @@ class BM25Search:
     def getAPScores(self, queries):
         for _, row in queries.iterrows():
             q_id, q_text = row['query_id'], row['text']
-            scores = self.bm25.get_scores(self.tokenizer(q_text))
+            scores = self.bm25.get_scores(tokenizer(q_text))
             ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
             self.ap_scores[q_id] = self._compute_ap(ranked_indices, self.relevant_docs.get(q_id, set()))
 
