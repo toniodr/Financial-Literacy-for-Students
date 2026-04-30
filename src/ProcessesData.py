@@ -21,9 +21,6 @@ class ProcessesData:
             self.queries = pd.DataFrame(json.load(f))
 
         # Calculate tfidf cause we prob need it for whatever ranking we decide to do
-        tfidfvectorizer = TfidfVectorizer(
-            stop_words='english'
-        )
-
-        self.tfidf = tfidfvectorizer.fit_transform(self.docs['text'])
+        self.vectorizer = TfidfVectorizer(stop_words='english')
+        self.tfidf = self.vectorizer.fit_transform(self.docs['text'])
         
