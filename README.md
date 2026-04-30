@@ -58,4 +58,32 @@ docker compose up -d build
 ```
 docker compose down
 ```
-
+# Using Search Models
+## Processing Collection
+Initialize DataProcessing during Indexing Processes.
+```
+p = DataProcessing(DATA_DIR)
+```
+`DATA_DIR` includes documents, queries, and relevance scores.
+### Precomputed Values
+Assuming `p` is the initialize variable for `DataProcessing`.
+- `p.docs` DataFrame of `documents.json`
+- `p.queries` DataFrame of test queries provided in `queries.json`
+- `p.qrels` DataFrame of Query_id, Document_id, and relevance (1 means relevant)
+## Search Engines
+After initializing data processing, use the given class variables to initialize a search engine. 
+```
+bm25 = BM25Search(p.docs, p.qrels)
+vsm = VSMSearch(p.docs, p.qrels, p.vectorizer, p.tfidf)
+bim = BIMSearch(p.docs, p.qrels)
+unigram = LanguageModel(docs=p.docs, relevance=p.qrels, model='unigram', lambda_=0.3)
+bigram = LanguageModel(docs=p.docs, relevance=p.qrels, model='bigram', lambda_=0.3)
+```
+## Searching
+To search using a search engine, call `getAPScores()` and define the query.
+```
+vsm.getAPScores(p.queries)
+```
+this returns a sorted list of documents (descending) that match the query.
+## Adding Live Queries
+For the demo, we need a way to pass in a live query. 
