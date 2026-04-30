@@ -1,4 +1,4 @@
-from ProcessesData import ProcessesData
+from src.ProcessesData import ProcessesData
 
 
 def main():
