@@ -16,7 +16,7 @@
 
 #### 1. Clone the Repo
 
-#### 3. Start the Environment 
+#### 2. Start the Environment 
 
 ```
 docker compose up -d --build
@@ -29,7 +29,7 @@ this command:
 
 _Note: You only need to use the `--build` flag the first time you build the Docker image or when someone adds new dependencies_
 
-#### 4. To Run the Code
+#### 3. To Run the Code
 
 ```
 docker compose exec ir-dev python main.py
