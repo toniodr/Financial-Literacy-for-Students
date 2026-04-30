@@ -8,7 +8,7 @@
 ## Project Structure 
 
 + `src/` - source code 
-+ `data/` - untracked git folder for the dataset provided by the professor 
++ `dataset/` - folder for the dataset provided by the professor 
 + `pyrpoject.toml` and `uv.lock` - defines python dependencies 
 + `docker-compose.yml` - connects local code to Docker container for real-time changes 
 
@@ -32,7 +32,7 @@ _Note: You only need to use the `--build` flag the first time you build the Dock
 #### 3. To Run the Code
 
 ```
-docker compose exec ir-dev python main.py
+docker compose exec ir-dev uv run <file_name>
 ```
 
 this command executes through the container 
