@@ -1,3 +1,5 @@
+import pandas as pd
+
 # Global Precomputed Values
 from src.DataProcessing import DataProcessing
 
@@ -74,6 +76,11 @@ def main():
     print(ranked_bi)
     for q, ap in sorted_bigram:
         print(f'{q}: {ap:.4f}')
+        
+    LiveSearchEngine = BM25Search(p.docs, p.qrels)
+    test_query = pd.DataFrame([{'query_id': 0, 'text': "econ teams"}])
+    res = LiveSearchEngine.search(test_query)
+    print(res)
     
 if __name__ == "__main__":
     main()
