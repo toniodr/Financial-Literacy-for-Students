@@ -34,7 +34,8 @@ class VSMSearch:
             q_id, q_text = row['query_id'], row['text']
             scores = cosine_similarity(self.vectorizer.transform([q_text]), self.tfidf_matrix)[0]
             ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
-            self.ranked_docs = pd.concat([self.ranked_docs, pd.DataFrame([{'query_id': q_id, 'text': q_text, 'ranked_indices': ranked_indices}])])
+            ranked_scores = [scores[i] for i in ranked_indices]
+            self.ranked_docs = pd.concat([self.ranked_docs, pd.DataFrame([{'query_id': q_id, 'text': q_text, 'ranked_indices': ranked_indices, 'scores': ranked_scores}])])
         return self.ranked_docs
 
     def getAPScores(self):
