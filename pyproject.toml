@@ -10,4 +10,5 @@ dependencies = [
     "pytrec-eval>=0.5",
     "rank-bm25>=0.2.2",
     "scikit-learn>=1.8.0",
+    "streamlit>=1.57.0",
 ]
