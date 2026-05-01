@@ -13,14 +13,14 @@ class BM25Search:
         self.sorted_ap = []
         self.ranked_docs = pd.DataFrame()
         
-        self.relevant_docs = (
+        self.relevant_docs: dict = (
             relevance[relevance['relevance'] == 1]
             .groupby('query_id')['doc_id']
             .apply(set)
             .to_dict()
         )
 
-    def _compute_ap(self, ranked_indices, relevant_doc_ids):
+    def _compute_ap(self, ranked_indices: list, relevant_doc_ids: set):
         total_rel = len(relevant_doc_ids)
         if total_rel == 0:
             return 0.0
@@ -31,7 +31,7 @@ class BM25Search:
                 ap_sum += rel_found / rank
         return ap_sum / total_rel
 
-    def search(self, queries):
+    def search(self, queries: pd.DataFrame):
         self.ranked_docs = pd.DataFrame()
         for _, row in queries.iterrows():
             q_id, q_text = row['query_id'], row['text']
@@ -40,14 +40,10 @@ class BM25Search:
             self.ranked_docs = pd.concat([self.ranked_docs, pd.DataFrame([{'query_id': q_id, 'text': q_text, 'ranked_indices': ranked_indices}])])
         return self.ranked_docs
     
-    # Computed using Relevance Table
     def getAPScores(self):
         for _, row in self.ranked_docs.iterrows():
             q_id, ranked_indices = row['query_id'], row['ranked_indices']
             self.ap_scores[q_id] = self._compute_ap(ranked_indices, self.relevant_docs.get(q_id, set()))
 
         self.sorted_ap = sorted(self.ap_scores.items(), key=lambda x: x[1], reverse=True)
-        return self.sorted_ap
-    
-    # Computed without Relevance Table
-    
+        return self.sorted_ap 

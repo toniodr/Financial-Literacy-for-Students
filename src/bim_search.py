@@ -39,7 +39,7 @@ class BIMSearch:
                 score += math.log((self.N - n_i + 0.5) / (n_i + 0.5))
         return score
 
-    def _compute_ap(self, ranked_indices, relevant_doc_ids):
+    def _compute_ap(self, ranked_indices: list, relevant_doc_ids: set):
         total_rel = len(relevant_doc_ids)
         if total_rel == 0:
             return 0.0
