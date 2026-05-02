@@ -171,12 +171,19 @@ elif st.session_state.view == 'results':
             </div>
             """, unsafe_allow_html=True)
             
-        pag_empty, pag_prev, pag_next = st.columns([8, 1.5, 1.5])
+        # PAGINATION
+        max_pages = 5
+
+        pag_left, pag_spacer, pag_prev, pag_next = st.columns([2, 6, 1, 1], 
+                                                              vertical_alignment="center")
         
-        max_pages = 5 
-        
+        with pag_left:
+            st.markdown(f"<div style='text-align: left; color: gray; font-size: 14px; padding-top: 8px;'>Pg. {st.session_state.page}/{max_pages}</div>", 
+                        unsafe_allow_html=True)
+        with pag_spacer:
+            st.empty() 
         with pag_prev:
-            st.button("Previous", disabled=(st.session_state.page <= 1), 
+            st.button("Prev", disabled=(st.session_state.page <= 1), 
                       on_click=prev_page, use_container_width=True)
         with pag_next:
             st.button("Next", disabled=(st.session_state.page >= max_pages), 
