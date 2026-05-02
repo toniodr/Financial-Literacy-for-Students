@@ -2,6 +2,7 @@ from src.DataProcessing import tokenizer
 from collections import defaultdict
 import math
 import re
+import pandas as pd
 
 class BIMSearch:
     def __init__(self, docs, relevance):
@@ -19,6 +20,7 @@ class BIMSearch:
 
         self.ap_scores = {}
         self.sorted_ap = []
+        self.ranked_docs = pd.DataFrame()
 
         self.relevant_docs = (
             relevance[relevance['relevance'] == 1]
@@ -37,7 +39,7 @@ class BIMSearch:
                 score += math.log((self.N - n_i + 0.5) / (n_i + 0.5))
         return score
 
-    def _compute_ap(self, ranked_indices, relevant_doc_ids):
+    def _compute_ap(self, ranked_indices: list, relevant_doc_ids: set):
         total_rel = len(relevant_doc_ids)
         if total_rel == 0:
             return 0.0
@@ -48,13 +50,20 @@ class BIMSearch:
                 ap_sum += rel_found / rank
         return ap_sum / total_rel
 
-    def getAPScores(self, queries):
+    def search(self, queries):
+        self.ranked_docs = pd.DataFrame()
         for _, row in queries.iterrows():
             q_id, q_text = row['query_id'], row['text']
             query_terms = set(tokenizer(q_text))
-
             scores = [self._bim_score(query_terms, doc_terms) for doc_terms in self.doc_terms]
             ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
+            ranked_scores = [scores[i] for i in ranked_indices]
+            self.ranked_docs = pd.concat([self.ranked_docs, pd.DataFrame([{'query_id': q_id, 'text': q_text, 'ranked_indices': ranked_indices, 'scores': ranked_scores}])])
+        return self.ranked_docs
+
+    def getAPScores(self):
+        for _, row in self.ranked_docs.iterrows():
+            q_id, ranked_indices = row['query_id'], row['ranked_indices']
             self.ap_scores[q_id] = self._compute_ap(ranked_indices, self.relevant_docs.get(q_id, set()))
 
         self.sorted_ap = sorted(self.ap_scores.items(), key=lambda x: x[1], reverse=True)

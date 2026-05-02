@@ -1,3 +1,5 @@
+import pandas as pd
+
 # Global Precomputed Values
 from src.DataProcessing import DataProcessing
 
@@ -25,35 +27,60 @@ def main():
     unigram = LanguageModel(docs=p.docs, relevance=p.qrels, model='unigram', lambda_=0.3)
     bigram = LanguageModel(docs=p.docs, relevance=p.qrels, model='bigram', lambda_=0.3)
 
-    sorted_bm25 = bm25.getAPScores(p.queries)
+
+    ranked_docs = bm25.search(p.queries)
+    sorted_bm25 = bm25.getAPScores()
+    
     print("====================================================")
-    print("BM25 Sorted :", end='\n\n')
+    print("BM25")
+    print(ranked_docs)    
     for q, ap in sorted_bm25:
         print(f'{q}: {ap:.4f}')
     
-    sorted_vsm = vsm.getAPScores(p.queries)
+
+    ranked_vsm = vsm.search(p.queries)
+    sorted_vsm = vsm.getAPScores()
+
     print("====================================================")
-    print("VSM Sorted :", end='\n\n')
+    print("VSM")   
+    print(ranked_vsm)
     for q, ap in sorted_vsm:
         print(f'{q}: {ap:.4f}')
-    
-    sorted_bim = bim.getAPScores(p.queries)
+
+
+    ranked_bim = bim.search(p.queries)
+    sorted_bim = bim.getAPScores()
+
     print("====================================================")
-    print("BIM Sorted :", end='\n\n')
+    print("BIM")   
+    print(ranked_bim)
     for q, ap in sorted_bim:
         print(f'{q}: {ap:.4f}')
-        
-    sorted_unigram = unigram.getAPScores(p.queries)
+
+
+    ranked_uni = unigram.search(p.queries)
+    sorted_unigram = unigram.getAPScores()
+
     print("====================================================")
-    print("Unigram Sorted :", end='\n\n')
+    print("LM Unigram")   
+    print(ranked_uni)
     for q, ap in sorted_unigram:
         print(f'{q}: {ap:.4f}')
 
-    sorted_bigram = bigram.getAPScores(p.queries)
+
+    ranked_bi = bigram.search(p.queries)
+    sorted_bigram = bigram.getAPScores()
+
     print("====================================================")
-    print("Bigram Sorted :", end='\n\n')
+    print("LM Bigram")   
+    print(ranked_bi)
     for q, ap in sorted_bigram:
         print(f'{q}: {ap:.4f}')
+        
+    LiveSearchEngine = BM25Search(p.docs, p.qrels)
+    test_query = pd.DataFrame([{'query_id': 0, 'text': "econ teams"}])
+    res = LiveSearchEngine.search(test_query)
+    print(res)
     
 if __name__ == "__main__":
     main()
