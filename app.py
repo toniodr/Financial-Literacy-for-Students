@@ -1,6 +1,34 @@
 import streamlit as st
+import pandas as pd
+
+from src.DataProcessing import DataProcessing
+from src.bm25_search import BM25Search
+from src.vsm_search import VSMSearch
+from src.bim_search import BIMSearch
+from src.language_model import LanguageModel
 
 st.set_page_config(layout="wide")
+
+# SEARCH ENGINE INIT (cached so it only builds once)
+@st.cache_resource
+def load_engines():
+    p = DataProcessing()
+    return p, {
+        'BM25': BM25Search(p.docs, p.qrels),
+        'VSM': VSMSearch(p.docs, p.qrels, p.vectorizer, p.tfidf),
+        'BIM': BIMSearch(p.docs, p.qrels),
+        'LM Unigram': LanguageModel(docs=p.docs, relevance=p.qrels, model='unigram', lambda_=0.3),
+        'LM Bigram': LanguageModel(docs=p.docs, relevance=p.qrels, model='bigram', lambda_=0.3),
+    }
+
+data, engines = load_engines()
+
+def run_live_search(query_text, engine_name):
+    engine = engines[engine_name]
+    q_df = pd.DataFrame([{'query_id': 0, 'text': query_text}])
+    result = engine.search(q_df).iloc[0]
+    return [(data.docs.iloc[i]['doc_id'], data.docs.iloc[i]['text'], s)
+            for i, s in zip(result['ranked_indices'], result['scores'])]
 
 # css structural alignment and result outlines
 st.markdown("""
@@ -59,6 +87,10 @@ if 'query' not in st.session_state:
     st.session_state.query = ''
 if 'page' not in st.session_state:
     st.session_state.page = 1
+if 'engine' not in st.session_state:
+    st.session_state.engine = 'BM25'
+if 'results' not in st.session_state:
+    st.session_state.results = []
 
 # initialize widget keys in session state
 if 'home_search_box' not in st.session_state:
@@ -80,14 +112,21 @@ def execute_home_search():
     search_term = st.session_state.home_search_box
     if search_term.strip():
         st.session_state.query = search_term
-        st.session_state.top_search_box = search_term 
+        st.session_state.top_search_box = search_term
         st.session_state.view = 'results'
         st.session_state.page = 1
+        st.session_state.results = run_live_search(search_term, st.session_state.engine)
 
 def execute_top_search():
     search_term = st.session_state.top_search_box
     if search_term.strip():
         st.session_state.query = search_term
+        st.session_state.page = 1
+        st.session_state.results = run_live_search(search_term, st.session_state.engine)
+
+def on_engine_change():
+    if st.session_state.query:
+        st.session_state.results = run_live_search(st.session_state.query, st.session_state.engine)
         st.session_state.page = 1
 
 def next_page():
@@ -113,6 +152,11 @@ if st.session_state.view == 'home':
         
         search_input_col, search_btn_col = st.columns([10, 1])
         
+        # home page search bar subtext
+        st.markdown("<div style='text-align: left; font-size: 14px; color: gray; " \
+            "margin-top: 5px; margin-left: 5px; margin-bottom: 5px'>Financial Literacy for Students</div>",
+            unsafe_allow_html=True)
+        
         with search_input_col:
             st.text_input("Search", key="home_search_box", 
                           on_change=execute_home_search, 
@@ -125,10 +169,8 @@ if st.session_state.view == 'home':
                       on_click=execute_home_search, 
                       type="tertiary", use_container_width=True)
         
-        # home page search bar subtext
-        st.markdown("<div style='text-align: left; font-size: 14px; color: gray; " \
-            "margin-top: 5px; margin-left: 5px;'>Financial Literacy for Students</div>", 
-            unsafe_allow_html=True)
+
+        st.selectbox("Engine", list(engines.keys()), key="engine")
 
 # =============================================================================
 # RESULTS PAGE
@@ -143,31 +185,42 @@ elif st.session_state.view == 'results':
                   use_container_width=True)
         
     with nav_search:
-        sc_input, sc_x, sc_mag = st.columns([8, 1, 1])
+        sc_input, sc_x, sc_mag, sc_eng = st.columns([6, 1, 1, 2])
         with sc_input:
-            st.text_input("Search", key="top_search_box", 
-                          on_change=execute_top_search, 
+            st.text_input("Search", key="top_search_box",
+                          on_change=execute_top_search,
                           label_visibility="collapsed")
         with sc_x:
-            st.button("✕", on_click=clear_top_search, 
-                      type="tertiary", 
+            st.button("✕", on_click=clear_top_search,
+                      type="tertiary",
                       use_container_width=True)
         with sc_mag:
-            st.button("⌕", key="top_search_btn", on_click=execute_top_search, 
+            st.button("⌕", key="top_search_btn", on_click=execute_top_search,
                       type="tertiary", use_container_width=True)
+        with sc_eng:
+            st.selectbox("Engine", list(engines.keys()), key="engine",
+                         on_change=on_engine_change, label_visibility="collapsed")
 
     st.divider()
 
     res_left_spacer, results_col, res_right_spacer = st.columns([1, 3, 1])
-    
+
     with results_col:
-        for i in range(1, 6):
-            doc_num = i + ((st.session_state.page - 1) * 5)
+        # Log Line for searches "engine | query text | relevant docs (live queries return all cause no rel judgements)" 
+        st.caption(f"[verify] engine={st.session_state.engine} | query={st.session_state.query!r} | total_hits={len(st.session_state.results)}")
+
+        page_size = 5
+        start = (st.session_state.page - 1) * page_size
+        end = start + page_size
+        page_results = st.session_state.results[start:end]
+
+        for doc_id, doc_text, score in page_results:
+            preview = doc_text if len(doc_text) <= 400 else doc_text[:400] + "..."
             st.markdown(f"""
             <div class="corner-box">
                 <div class="corner-box-inner"></div>
-                <strong>//Doc ID:</strong><br><br>
-            //document text 
+                <strong>Doc ID:</strong> {doc_id} &nbsp; <em>(score: {score:.4f})</em><br><br>
+                {preview}
             </div>
             """, unsafe_allow_html=True)
             
