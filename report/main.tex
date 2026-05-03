@@ -1,4 +1,4 @@
-\documentclass[twocolumn,10pt]{article}
+\documentclass[twocolumn,11pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage[margin=1in]{geometry}
@@ -8,6 +8,7 @@
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{tocloft} 
+\usepackage{parskip}
 
 \renewcommand{\contentsname}{List of Contents}
 \renewcommand{\cfttoctitlefont}{\hfill\Huge\bfseries}
@@ -26,9 +27,9 @@
 \onecolumn
 \input{sections/cover}
 \input{sections/lists}
-\input{sections/project_plan}
 
 \twocolumn
+\input{sections/project_plan}
 \input{sections/dataset_analysis}
 \input{sections/processing}
 \input{sections/index}

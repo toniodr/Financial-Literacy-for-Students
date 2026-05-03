@@ -10,12 +10,44 @@
 \phantomsection
 \addcontentsline{toc}{subsection}{Introduction}
 
+This project aims to build a search engine that allows students to retrieve 
+relevant documents from a financial dataset. It is part of an educational 
+initiative to promote financial literacy. This enables students to better 
+understand and handle real-world financial situations encountered during their 
+professional lives. To achieve this goal we have designed and implemented 
+an \textit{Information Retrieval (IR)} system that processes textual data, 
+builds an \textit{index} over a document collection, and ranks documents in 
+response to user queries. 
+
+
 % =============================================================================
 % TEAM ROLES AND RESPONSIBILITIES 
 % =============================================================================
 \subsection*{Team Roles and Responsibilities }
 \phantomsection
 \addcontentsline{toc}{subsection}{Team Roles and Responsibilities}
+
+\textbf{Porter Clevidence} 
+\begin{itemize}
+    \item Implemented BIM search 
+    \item Implemented BM25 search 
+    \item Implemented Language Model retrieval
+    \item Implemented VSM search 
+    \item Search algorithm selection
+\end{itemize}
+
+\textbf{Antonio Duran-Ramos}
+\begin{itemize}
+    \item Development environment setup 
+    \item Graphical interface design 
+    \item LaTeX report setup
+    \item 
+\end{itemize}
+
+\textbf{Parth Gajjar}
+
+\textbf{Arpit Vora}
+
 
 % =============================================================================
 % METHODS AND TECHNIQUES 
@@ -24,9 +56,27 @@
 \phantomsection
 \addcontentsline{toc}{subsection}{Methods and Techniques}
 
+In our system design we chose to use a combination of \texttt{Docker}
+and \texttt{uv}, along with various Python libraries. Docker allowed us to 
+standardize our development environment so that our search engine behaved 
+identical, regardless of host machine. uv allowed us to formalize our project 
+as it handles initializing Python virtual environments and it manages 
+dependencies for reproducible Python environments. As for the Python libraries 
+we utilized, \texttt{pandas} was used to read from the provided JSON files 
+to create structured data frames. \texttt{scikit-learn} was used for english 
+stop words and its functions: \texttt{TfidfVectorizer} and 
+\texttt{cosine\_similarity}. \texttt{rank-bm25} was used for its implementation 
+of the BM25 ranking algorithm. \texttt{streamlit} was used to implement the 
+graphical interface for our search engine. 
+
+
+
 % =============================================================================
 % DATA
 % =============================================================================
 \subsection*{Data}
 \phantomsection
 \addcontentsline{toc}{subsection}{Data}
+
+The dataset provided consisted of a collection of financial documents, 
+along with static queries and their corresponding relevance judgments.
