@@ -4,3 +4,21 @@ __pycache__
 
 .DS_Store
 slides
+
+*.aux
+*.bbl
+*.blg
+*.brf
+*.bcf
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.lot
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
