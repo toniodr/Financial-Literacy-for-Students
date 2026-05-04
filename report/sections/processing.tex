@@ -3,15 +3,6 @@
 \phantomsection
 \addcontentsline{toc}{section}{Text Processing}
 
-% =============================================================================
-% TOKENIZER
-% =============================================================================
-\subsection*{Tokenizer Definition}
-\phantomsection
-\addcontentsline{toc}{subsection}{Tokenizer Definition}
-
-
-
 % ============================================================================= 
 % NORMALIZATION
 % ============================================================================= 
@@ -19,6 +10,36 @@
 \phantomsection
 \addcontentsline{toc}{subsection}{Surface Level Normalization Definition}
 
+Before tokenizing and any further text processing, the text undergoes a 
+three-stage cleaning process to ensure variations in formatting do not create 
+duplicate tokens in our index. 
+\begin{enumerate}
+    \item   The \texttt{.lower()} function converts every character in 
+            the documents to lowercase. 
+    \item   We strip out any punctuation, including periods, commas, quotes, 
+            brackets, and special symbols using a regular expression. Specifically, 
+            \texttt{re.sub(r'[\textasciicircum \textbackslash w\textbackslash s]',
+            '')}, which tells Python to find any character that is $not$ a word 
+            character (numbers included) or a whitespace character, and replace 
+            it with nothing. 
+    \item   We again use a regular expression to target any sequence of one 
+            or more spaces to collapse them to a single, clean space. 
+            Additionally, we apply the \texttt{.strip()} function to this 
+            regular expression to trim any lingering spaces at the beginning 
+            and end of a document. 
+\end{enumerate}
+
+
+% =============================================================================
+% TOKENIZER
+% =============================================================================
+\subsection*{Tokenizer Definition}
+\phantomsection
+\addcontentsline{toc}{subsection}{Tokenizer Definition}
+
+Now that the text has been normalized, we call \texttt{.split()} to break 
+the strings apart at every single space. This function call results in a 
+structured list of tokens. 
 
 % ============================================================================= 
 % STOPPING
@@ -27,6 +48,11 @@
 \phantomsection
 \addcontentsline{toc}{subsection}{Stopping Definition}
 
+At the same time the \texttt{.split()} function is tokenizing the text, we 
+immediately check the current token against the \texttt{ENGLISH\_STOP\_WORDS}
+list provided by the \texttt{scikit-learn} library. If the token is a highly 
+common word, (i.e., "the", "is", "at", etc.), the token is instantly discarded. 
+This results in a final tokens list full of meaningful words. 
 
 % ============================================================================= 
 % STEMMING/LEMMATIZATION
@@ -34,3 +60,8 @@
 \subsection*{Stemming/Lemmatizing Definition}
 \phantomsection
 \addcontentsline{toc}{subsection}{Stemming/Lemmatizing Definition}
+
+Finally, the text processing pipeline ends by looping through the tokens 
+and it applies \texttt{NLTK}'s \texttt{PorterStemmer()}, which removes 
+common English suffixes and prefixes. This process shrinks our vocabulary 
+drastically. 
