@@ -22,3 +22,5 @@ slides
 *.run.xml
 *.synctex.gz
 *.toc
+
+*.txt
