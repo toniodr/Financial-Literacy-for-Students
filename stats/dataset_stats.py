@@ -1,6 +1,11 @@
 import pandas as pd
 import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from src.DataProcessing import DataProcessing, tokenizer
+
 
 def main():
     print("Loading dataset...")
@@ -41,7 +46,7 @@ def main():
     )
 
     # write report to a text file
-    output_filename = "dataset_stats.txt"
+    output_filename = "stats/dataset_stats.txt"
     with open(output_filename, "w", encoding="utf-8") as f:
         f.write(report_content)
         
