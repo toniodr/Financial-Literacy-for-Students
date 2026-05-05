@@ -56,7 +56,6 @@ st.markdown("""
         box-shadow: #2e8b57 0px 0px 0px 1px inset !important;
     }
 
-    /* --- THE FIX: Only hijack PRIMARY buttons for the document cards --- */
     button[kind="primary"] {
         position: relative !important;
         padding: 25px !important;
@@ -71,8 +70,10 @@ st.markdown("""
         color: inherit !important;
     }
     
-    /* Forces the inner text to elegantly truncate at exactly 3 lines */
     button[kind="primary"] p {
+        width: 100% !important;
+        text-align: left !important;
+        margin: 0 !important;
         display: -webkit-box !important;
         -webkit-line-clamp: 3 !important;
         -webkit-box-orient: vertical !important;
@@ -104,7 +105,14 @@ st.markdown("""
         border-right: 2px solid rgba(150, 150, 150, 0.5); 
     }
     
-    button[kind="primary"] div { width: 100%; }
+    button[kind="primary"] div { 
+        width: 100% !important; 
+        display: flex !important;
+        flex-direction: column !important; 
+        align-items: flex-start !important; 
+        justify-content: flex-start !important;
+        text-align: left !important;
+    }
     
     button[kind="primary"] div::before { 
         top: 0; right: 0; 
