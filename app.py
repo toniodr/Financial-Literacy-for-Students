@@ -225,7 +225,7 @@ elif st.session_state.view == 'results':
     nav_home, nav_search, nav_spacer = st.columns([0.5, 4, 3.5])
     
     with nav_home:
-        st.button("⾕", on_click=go_home, type="tertiary", use_container_width=True)
+        st.button("⌂ Home", on_click=go_home, type="tertiary", use_container_width=True)
         
     with nav_search:
         sc_input, sc_eng, sc_x, sc_mag = st.columns([7.5, 1.5, 0.6, 0.6])
