@@ -221,7 +221,7 @@ if st.session_state.view == 'home':
                       on_click=execute_home_search, 
                       type="tertiary", use_container_width=True)
         
-        st.markdown("<div style='text-align: left; font-size: 14px; color: gray; " \
+        st.markdown("<div style='text-align: left; font-size: 14px; color: black; " \
             "margin-top: 5px; margin-left: 5px;'>Financial Literacy for Students</div>",
             unsafe_allow_html=True)
 
