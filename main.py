@@ -30,13 +30,13 @@ def main():
 
     ranked_docs = bm25.search(p.queries)
     sorted_bm25 = bm25.getAPScores()
-    
+    map_bm25 = bm25.getMAP()
     print("====================================================")
     print("BM25")
     print(ranked_docs)    
     for q, ap in sorted_bm25:
         print(f'{q}: {ap:.4f}')
-    
+    print("MAP: ", map_bm25)
 
     ranked_vsm = vsm.search(p.queries)
     sorted_vsm = vsm.getAPScores()

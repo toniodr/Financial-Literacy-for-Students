@@ -68,3 +68,10 @@ class BIMSearch:
 
         self.sorted_ap = sorted(self.ap_scores.items(), key=lambda x: x[1], reverse=True)
         return self.sorted_ap
+
+    def getMAP(self):
+        if not self.ap_scores:
+            self.getAPScores()
+        if not self.ap_scores:
+            return 0.0
+        return sum(self.ap_scores.values()) / len(self.ap_scores)
