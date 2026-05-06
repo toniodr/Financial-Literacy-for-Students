@@ -1,0 +1,99 @@
+\clearpage
+\section*{Project Plan}
+\phantomsection
+\addcontentsline{toc}{section}{Project Plan} 
+
+% =============================================================================
+% INTRODUCTION
+% =============================================================================
+\subsection*{Introduction}
+\phantomsection
+\addcontentsline{toc}{subsection}{Introduction}
+
+This project aims to build a search engine that allows students to retrieve 
+relevant documents from a financial dataset. It is part of an educational 
+initiative to promote financial literacy. This enables students to better 
+understand and handle real-world financial situations encountered during their 
+professional lives. To achieve this goal we have designed and implemented 
+an \textit{Information Retrieval (IR)} system that processes textual data, 
+builds an \textit{index} over a document collection, and \textit{ranks} 
+documents in response to user queries. 
+
+
+% =============================================================================
+% TEAM ROLES AND RESPONSIBILITIES 
+% =============================================================================
+\subsection*{Team Roles and Responsibilities }
+\phantomsection
+\addcontentsline{toc}{subsection}{Team Roles and Responsibilities}
+
+\textbf{Porter Clevidence} 
+\begin{itemize}
+    \item   Implemented BIM search 
+    \item   Implemented BM25 search 
+    \item   Implemented Language Model retrieval
+    \item   Implemented VSM search 
+    \item   Search algorithm selection
+\end{itemize}
+
+\textbf{Antonio Duran-Ramos}
+\begin{itemize}
+    \item   Development environment setup 
+    \item   Graphical interface design 
+    \item   Written report 
+    \item   Figures and Tables
+    \item   Dataset statistics
+\end{itemize}
+
+\textbf{Parth Gajjar}
+
+\textbf{Arpit Vora}
+
+
+% =============================================================================
+% METHODS AND TECHNIQUES 
+% =============================================================================
+\subsection*{Methods and Techniques}
+\phantomsection
+\addcontentsline{toc}{subsection}{Methods and Techniques}
+
+To ensure cross-platform reproducibility across all of our team members, 
+we used \texttt{Docker} for containerization. Docker allowed us to standardize
+our development environment so that our search engine behaved identical, 
+regardless of the host machine's underlying operating system. 
+
+Within this Docker container, our project formalizes its Python dependencies 
+with \texttt{uv} as the the primary package and virtual environmental manager. 
+uv ensured exact reproducibility of the software state for implementation of 
+the search engine. 
+
+Within uv, the core retrieval logic and presentation layers are constructed 
+with various Python libraries:
+\begin{itemize}
+    \item   \texttt{pandas} was used to parse the provided JSON dataset files 
+            to create structured data frames 
+    \item   \texttt{nltk} and \texttt{scikit-learn} were used for natural 
+            language processing tasks; \texttt{nltk} for its implementation 
+            of the \textit{Porter Stemming} algorithm and \texttt{scikit-learn}
+            for its list of English stop words
+    \item   \texttt{scikit-learn} was also used for its functions 
+            \texttt{TfidfVectorizer} and \texttt{cosine\_similarity}
+    \item   \texttt{rank-bm25} was used for its implementation of the BM25 
+            ranking algorithm 
+    \item   \texttt{streamlit} was used to implement the graphical interface 
+            of the search engine
+    \item   \texttt{matplotlib} was used to render figures and graphs based 
+            on retrieved data 
+\end{itemize}
+
+
+
+% =============================================================================
+% DATA
+% =============================================================================
+\subsection*{Data}
+\phantomsection
+\addcontentsline{toc}{subsection}{Data}
+
+The dataset provided consisted of a collection of financial documents, 
+along with static queries and their corresponding relevance judgments.

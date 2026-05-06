@@ -1,0 +1,54 @@
+\clearpage
+\section*{Retrieval Model}
+\phantomsection
+\addcontentsline{toc}{section}{Retrieval Model}
+
+% ============================================================================ 
+% RANKING
+% ============================================================================ 
+\subsection*{Ranking}
+\phantomsection
+\addcontentsline{toc}{subsection}{Ranking}
+
+Before any relevance scores can be computed, the system projects the 
+preprocessed queries and the document collection into mathematical 
+representations. The mathematical representations are dictated by the 
+requirements of the active retrieval model. 
+\begin{itemize}
+    \item   For the Vector Space Model, both the documents and query are 
+            represented as high-dimensional, normalized vectors in a 
+            shared vocabulary space through the \texttt{TfidfVectorizor}
+            function.
+    \item   For the BM25 and Language Models, documents and queries are 
+            represented as sequential lists of tokens. This list preserves 
+            the localized term frequencies and document lengths for 
+            probabilistic scoring and unigram or bigram sequences.
+    \item   For BIM, documents and queries are mapped to Python's \texttt{set}
+            objects. We discard term frequencies and sequence data to 
+            evaluate binary term presence.
+\end{itemize}
+
+Then, during query execution, the search engine iterates over the document 
+space and generates a relevance score for each document. Again, this score 
+is dictated by the active retrieval model.
+\begin{itemize}
+    \item   For Vector Space Model, the system calculates the cosine angle 
+            between the query vector and document vectors. This yields a 
+            similarity score between $0.0$ and $1.0$. 
+    \item   For BM25, the system calculates a score based on term frequency 
+            and document length normalization constraints.
+    \item   For BIM, the system iterates through the query terms, checking for 
+            set intersections with the document. This system dynamically 
+            sums the probabilistic weights for all intersecting terms.
+    \item   For the Language Models, the system calculates the probability of 
+            the query given the document model. This system transforms the 
+            smooth probabilities into log space and sums them to prevent 
+            arithmetic underflow caused by multiplying small probabilities. 
+\end{itemize}
+
+After the relevance scores have been computed across the entire collection, 
+the values are stored in a contiguous array, parallel to the original 
+document ID index. To establish a final ranking order, the array is sorted 
+from highest relevance score to lowest using Python's sorting capabilities. 
+The ordered indices, along side their scores, are stored in a data frame 
+that is then used for pagination in the graphical interface. 
