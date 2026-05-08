@@ -84,3 +84,13 @@ Language Models), the index is designed using hash maps. Our system constructs
 unigram and bigram term-frequency mappings. This design similarly allows for 
 $\mathcal{O}(1)$ retrieval of local documents lengths, collection occurrences, 
 and document frequencies required for probabilistic scoring. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{../eval/figures/indexing_ds.png}
+    \caption[Indexing Data Structure Architecture]{
+        Index design process for the implemented retrieval models. All 
+        retrieval models share the same dataset. 
+    }
+    \label{figure:indexing}
+\end{figure}

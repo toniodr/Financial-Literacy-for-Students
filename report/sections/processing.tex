@@ -66,3 +66,14 @@ The remaining list of tokens is then looped over by \texttt{nltk}'s
 \texttt{PorterStemmer()} for algorithmic suffix-stripping. This algorithm 
 removes common English suffixes to ensure that our vocabulary word variants 
 converge to a single root index term. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{../eval/figures/txt_processing.png}
+    \caption[4-Stage Text Processing Pipeline]{
+        An example string passed through the four-stage text processing pipeline. 
+        Raw text is passed through surface-level normalization, tokenization, 
+        stop-word removal, and stemming before use in the system's index.
+    }
+    \label{figure:text_processing_pipeline}
+\end{figure}

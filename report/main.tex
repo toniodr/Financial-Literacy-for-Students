@@ -9,6 +9,9 @@
 \usepackage{hyperref}
 \usepackage{tocloft} 
 \usepackage{parskip}
+\usepackage{caption}
+
+\captionsetup{labelfont=it, font=scriptsize}
 
 \renewcommand{\contentsname}{List of Contents}
 \renewcommand{\cfttoctitlefont}{\hfill\Huge\bfseries}
@@ -26,7 +29,10 @@
 
 \onecolumn
 \input{sections/cover}
+\begingroup
+\renewcommand{\numberline}[1]{}
 \input{sections/lists}
+\endgroup
 
 \twocolumn
 \input{sections/project_plan}

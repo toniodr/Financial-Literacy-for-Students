@@ -14,6 +14,7 @@ Before any relevance scores can be computed, the system projects the
 preprocessed queries and the document collection into mathematical 
 representations. The mathematical representations are dictated by the 
 requirements of the active retrieval model. 
+
 \begin{itemize}
     \item   For the Vector Space Model, both the documents and query are 
             represented as high-dimensional, normalized vectors in a 
@@ -31,6 +32,7 @@ requirements of the active retrieval model.
 Then, during query execution, the search engine iterates over the document 
 space and generates a relevance score for each document. Again, this score 
 is dictated by the active retrieval model.
+
 \begin{itemize}
     \item   For Vector Space Model, the system calculates the cosine angle 
             between the query vector and document vectors. This yields a 
@@ -46,9 +48,31 @@ is dictated by the active retrieval model.
             arithmetic underflow caused by multiplying small probabilities. 
 \end{itemize}
 
+\begin{table}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{../eval/figures/models_representation.png}
+    \caption[Model Representation and Scoring Matrix]{
+        Details of the query and document representations, underlying 
+        mathematical scoring functions, and computational complexities 
+        across the implemented retrieval algorithms. 
+    }
+    \label{tab:model_representations}
+\end{table}
+
 After the relevance scores have been computed across the entire collection, 
 the values are stored in a contiguous array, parallel to the original 
 document ID index. To establish a final ranking order, the array is sorted 
 from highest relevance score to lowest using Python's sorting capabilities. 
 The ordered indices, along side their scores, are stored in a data frame 
 that is then used for pagination in the graphical interface. 
+
+\begin{table}[htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth]{../eval/figures/smoothing.png}
+    \caption[Smoothing Balance]{
+        Visual representation of the smoothing balance, where $\lambda=0.3,$
+        illustrating the proportional weighting between local document 
+        likelihood and the global collection. 
+    }
+    \label{tab:smoothing_balance}
+\end{table}
