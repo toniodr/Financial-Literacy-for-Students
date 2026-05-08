@@ -9,7 +9,7 @@ from src.bm25_search import BM25Search
 from src.bim_search import BIMSearch
 from src.language_model import LanguageModel
 
-from eval.metrics import get_p_at_k, get_all_p_at_k, get_pr_curve
+from eval.metrics import get_p_at_k, get_all_p_at_k, get_pr_curve, get_runtime, get_pareto_frontier, get_combined_score
 import eval.plots as plotter
 
 def main():
@@ -33,11 +33,11 @@ def main():
     all_ap_scores = {}
     pr_curves = {}
     patk_curves = {}
+    runtimes = {}
     
-    colors = ['#4C72B0', '#DD8452', '#55A868', '#C44E52', '#8172B3']
-    
+    colors = ['#4C72B0', '#DD8452', '#55A868', '#C44E52', '#8172B3']            
     for name, model in models.items():
-        model.search(p.queries)
+        runtimes[name] = get_runtime(p, model)
         sorted_ap = model.getAPScores()
         
         ap_dict = {q_id: ap for q_id, ap in sorted_ap}
@@ -51,6 +51,8 @@ def main():
         patk_curves[name] = get_all_p_at_k(model, max_k=10)
 
     names = list(map_scores.keys())
+    ranks = get_combined_score(names, map_scores, runtimes)
+    pareto_names = get_pareto_frontier(names, map_scores, runtimes)
 
     print("Generating figures...")
     plotter.plot_map_comparison(names, list(map_scores.values()), colors, figures_dir)
@@ -58,6 +60,9 @@ def main():
     plotter.plot_pr_curve(pr_curves, colors, figures_dir)
     plotter.plot_patk_curve(names, patk_curves, colors, figures_dir)
     plotter.plot_metrics_table(names, map_scores, p5_scores, figures_dir)
+    plotter.plot_runtime(names, runtimes, colors, figures_dir)
+    plotter.plot_runtime_map_table(names, map_scores, runtimes, ranks, figures_dir)
+    plotter.plot_pareto_frontier(names, map_scores, runtimes, pareto_names, colors, figures_dir)
 
     print(f"Figures saved to /eval/figures")
 

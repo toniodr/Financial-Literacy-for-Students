@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 def get_p_at_k(model, k=5):
     """Calculate average Precision at K."""
@@ -76,3 +77,37 @@ def get_pr_curve(model):
         return recall_levels, np.zeros(11)
     
     return recall_levels, sum_precisions / valid_queries
+
+def get_runtime(p, model):
+
+    min_t = float('inf')
+    for i in range(20):
+        start = time.perf_counter()
+        model.search(p.queries)
+        runtime = time.perf_counter() - start
+        if runtime < min_t: min_t = runtime
+
+    return min_t
+
+def get_pareto_frontier(names, map_scores, runtimes):
+    """Return set of names that are non-dominated in (MAP up, runtime down) space."""
+    pareto = set()
+    for n_i in names:
+        r_i, m_i = runtimes[n_i], map_scores[n_i]
+        dominated = any(
+            n_j != n_i
+            and runtimes[n_j] <= r_i and map_scores[n_j] >= m_i
+            and (runtimes[n_j] < r_i or map_scores[n_j] > m_i)
+            for n_j in names
+        )
+        if not dominated:
+            pareto.add(n_i)
+    return pareto
+
+def get_combined_score(names, map_scores, runtimes, baseline='BIM'):
+    """Relative-gain score over a baseline engine on both MAP and runtime."""
+    return {
+        name: (1 - map_scores[baseline] / map_scores[name])
+              + (1 - runtimes[baseline] / runtimes[name])
+        for name in names
+    }
