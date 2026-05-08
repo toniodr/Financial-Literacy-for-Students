@@ -202,7 +202,7 @@ if st.session_state.view == 'home':
     
     with center_col:
         st.markdown("<div style='text-align: center; font-size: 2.5rem; " \
-            "font-weight: 700; margin-bottom: 1rem;'>//placeholder</div>", 
+            "font-weight: 700; margin-bottom: 1rem;'>Financial Engine</div>", 
             unsafe_allow_html=True)
         
         search_input_col, search_eng_col, search_btn_col = st.columns([8.2, 1.8, 0.8])
