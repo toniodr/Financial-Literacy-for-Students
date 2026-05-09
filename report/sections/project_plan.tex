@@ -17,7 +17,7 @@ understand and handle real-world financial situations encountered during their
 professional lives. To achieve this goal we have designed and implemented 
 an \textit{Information Retrieval (IR)} system that processes textual data, 
 builds an \textit{index} over a document collection, and \textit{ranks} 
-documents in response to user queries. 
+documents in response to user queries. [1]
 
 
 % =============================================================================
@@ -40,7 +40,7 @@ documents in response to user queries.
 \begin{itemize}
     \item   Development environment setup 
     \item   Graphical interface design 
-    \item   Written report 
+    \item   Written report [2]
     \item   Figures and Tables
     \item   Dataset statistics
 \end{itemize}
@@ -64,12 +64,12 @@ documents in response to user queries.
 \addcontentsline{toc}{subsection}{Methods and Techniques}
 
 To ensure cross-platform reproducibility across all of our team members, 
-we used \texttt{Docker} for containerization. Docker allowed us to standardize
+we used \texttt{Docker} [8] for containerization. Docker allowed us to standardize
 our development environment so that our search engine behaved identical, 
 regardless of the host machine's underlying operating system. 
 
 Within this Docker container, our project formalizes its Python dependencies 
-with \texttt{uv} as the the primary package and virtual environmental manager. 
+with \texttt{uv} [9] as the the primary package and virtual environmental manager. 
 uv ensured exact reproducibility of the software state for implementation of 
 the search engine. 
 
@@ -86,8 +86,8 @@ with various Python libraries:
             \texttt{TfidfVectorizer} and \texttt{cosine\_similarity}
     \item   \texttt{rank-bm25} was used for its implementation of the BM25 
             ranking algorithm 
-    \item   \texttt{streamlit} was used to implement the graphical interface 
-            of the search engine
+    \item   \texttt{streamlit} [3] was used to implement the graphical interface 
+            of the search engine 
     \item   \texttt{matplotlib} was used to render figures and graphs based 
             on retrieved data 
 \end{itemize}

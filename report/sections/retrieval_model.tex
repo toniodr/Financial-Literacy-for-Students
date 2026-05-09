@@ -36,16 +36,16 @@ is dictated by the active retrieval model.
 \begin{itemize}
     \item   For Vector Space Model, the system calculates the cosine angle 
             between the query vector and document vectors. This yields a 
-            similarity score between $0.0$ and $1.0$. 
+            similarity score between $0.0$ and $1.0$. [5]
     \item   For BM25, the system calculates a score based on term frequency 
-            and document length normalization constraints.
+            and document length normalization constraints. [4][6][7]
     \item   For BIM, the system iterates through the query terms, checking for 
             set intersections with the document. This system dynamically 
-            sums the probabilistic weights for all intersecting terms.
+            sums the probabilistic weights for all intersecting terms. [5]
     \item   For the Language Models, the system calculates the probability of 
             the query given the document model. This system transforms the 
             smooth probabilities into log space and sums them to prevent 
-            arithmetic underflow caused by multiplying small probabilities. 
+            arithmetic underflow caused by multiplying small probabilities. [5]
 \end{itemize}
 
 \begin{table}[htbp]
