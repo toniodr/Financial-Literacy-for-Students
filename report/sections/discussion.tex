@@ -3,3 +3,85 @@
 \phantomsection
 \addcontentsline{toc}{section}{Discussion}
 
+% ============================================================================= 
+% DISCUSSION
+% =============================================================================
+
+This project provided extensive insight into the methods and concepts we 
+learned throughout the course of this semester. The insight of this project 
+came from not only implementing the retrieval models we learned, but also 
+by analyzing and comparing the results of the individual retrieval models. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{../eval/figures/map_comparison.png}
+    \caption[Overall Model Performance Comparison]{
+        The Mean Average Precision (MAP) scores of the implemented 
+        retrieval models with BM25 having the highest score, followed by 
+        the Unigram Language Model, VSM, BIM, and finally the Bigram 
+        Language Model.  
+    }
+    \label{figure:overall_model_perf}
+\end{figure}
+
+Across the 5,000 financial document corpus, retrieval model BM25 was the 
+overall better performing model when compared to its counterparts. 
+
+\begin{table}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{../eval/figures/metrics_table.png}
+    \caption[Final Evaluation Metrics]{
+        MAP and P@5 scores for the implemented retrieval models ordered 
+        by MAP score. 
+    }
+    \label{tab:model_metrics}
+\end{table}
+
+As evidenced by \textit{Figure 3} and \textit{Table 4}, BM25 consistently 
+achieved the highest Mean Average Precision (MAP) and Precision at 
+5 (P@5) scores. We attribute these findings to the algorithm's 
+professionally implemented probabilistic framework. This framework 
+balances term frequency saturation with document length normalization, 
+an elegance that our custom built algorithms and mathematical computations 
+may be lacking. Additionally, the document dataset consisted of various 
+lengths, a property that BM25 mitigates by preventing longer, repetitive 
+documents from artificially inflating their relevance scores. 
+
+However, despite the overall dominance of the BM25 algorithm, performance of this 
+model severely degraded with the provided secret queries. We hypothesized 
+that this algorithm would maintain high retrieval accuracy, but, 
+the visual and numerical results of the blind evaluation revealed 
+a performance degradation, invalidating our initial assumption. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{../secrets/bm25/bm25_secret_ap_bars.png}
+    \caption[BM25: Per-Query AP]{
+        Average Precision (AP) of the BM25 retrieval model against the 
+        secret queries, with an overall MAP score of 0.1781.
+    }
+    \label{figure:bm25_secret_ap}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{../secrets/bm25/bm25_secret_pat10.png}
+    \caption[BM25: Precision@10]{
+        Precision at 10 scores for the BM25 retrieval model against the 
+        two secret queries. 
+    }
+    \label{figure:bm25_pat10}
+\end{figure}
+
+This degradation is corroborated by \texttt{Figure 4} and \texttt{Figure 5}. 
+\texttt{Figure 4} shows us that the secret queries dropped the overall 
+MAP score of BM25 significantly. Furthermore, \texttt{Figure 5} shows us that 
+this retrieval model failed to return a notable amount of 
+relevant documents within the top ten results for the secret queries. 
+
+We conclude that this performance degradation may be a cause of the 
+strict probabilistic formula that penalizes prevalent words. This algorithm 
+may be calculating zero weight terms for words in the queries, resulting 
+in non-relevant documents to be returned. These findings tell us that 
+future iterations must implement vocabulary smoothing to safely 
+handle common query terms. 
