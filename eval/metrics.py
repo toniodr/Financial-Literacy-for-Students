@@ -17,6 +17,22 @@ def get_p_at_k(model, k=5):
         
     return sum(p_scores) / len(p_scores) if p_scores else 0.0
 
+def get_per_query_p_at_k(model, k=10):
+    """Precision at K for each individual query."""
+    p_scores = {}
+    for _, row in model.ranked_docs.iterrows():
+        q_id = row['query_id']
+        ranked_indices = row['ranked_indices'][:k]
+        rel_docs = model.relevant_docs.get(q_id, set())
+
+        if not rel_docs:
+            continue
+
+        tp = sum(1 for idx in ranked_indices if model.doc_ids[idx] in rel_docs)
+        p_scores[q_id] = tp / k
+
+    return p_scores
+
 def get_all_p_at_k(model, max_k=10):
     """calculate average Precision at K for every K from 1 up to max_k."""
     k_scores = {k: [] for k in range(1, max_k + 1)}

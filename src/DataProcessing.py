@@ -36,7 +36,7 @@ def tokenizer(text):
     return stemmed_tokens
 
 class DataProcessing:
-    def __init__(self, DATA_DIR="dataset"):
+    def __init__(self, DATA_DIR="dataset", QRELS_DIR='qrels.json', Q_DIR='queries.json'):
         """Creates document, query, and relevance dataframe.
 
         Args:
@@ -47,10 +47,10 @@ class DataProcessing:
         with open(data_dir / "documents.json", encoding='utf-8') as f:
             self.docs = pd.DataFrame(json.load(f))
         
-        with open(data_dir / "qrels.json", encoding='utf-8') as f:
+        with open(data_dir / QRELS_DIR, encoding='utf-8') as f:
             self.qrels = pd.DataFrame(json.load(f))
 
-        with open(data_dir / "queries.json", encoding='utf-8') as f:
+        with open(data_dir / Q_DIR, encoding='utf-8') as f:
             self.queries = pd.DataFrame(json.load(f))
 
         # Calculate tfidf cause we prob need it for whatever ranking we decide to do

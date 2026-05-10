@@ -148,6 +148,51 @@ def plot_pareto_frontier(names, map_scores, runtimes, pareto_names, colors, save
     plt.savefig(os.path.join(save_dir, "pareto_frontier.png"), dpi=300, bbox_inches='tight')
     plt.close()
 
+def plot_blind_per_query_ap(name, ap_dict, map_score, color, save_dir):
+    query_ids = sorted([str(qid) for qid in ap_dict.keys()])
+    ap_values = sorted(list(ap_dict.values()))
+
+    plt.figure(figsize=(8, 5))
+    bars = plt.bar(query_ids, ap_values, color=color, edgecolor='black')
+    plt.axhline(y=map_score, color='red', linestyle='--', linewidth=1.5,
+                label=f'Overall MAP ({map_score:.4f})')
+
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval + 0.01,
+                 f'{yval:.4f}', ha='center', va='bottom', fontweight='bold')
+
+    plt.xlabel('Secret Query ID', fontweight='bold')
+    plt.ylabel('Average Precision (AP)', fontweight='bold')
+    plt.title(f'{name}: Per-Query Average Precision (Blind Evaluation)', fontweight='bold')
+    plt.legend(loc='upper right')
+    plt.ylim(0, 1.0)
+    plt.grid(True, axis='y', linestyle='--', alpha=0.5)
+
+    safe = name.replace(' ', '_')
+    plt.savefig(os.path.join(save_dir, f"blind_per_query_ap_{safe}.png"), dpi=300, bbox_inches='tight')
+    plt.close()
+
+def plot_blind_per_query_p_at_k(name, p_at_k_dict, k, color, save_dir):
+    query_ids = [str(qid) for qid in p_at_k_dict.keys()]
+    p_values = list(p_at_k_dict.values())
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(query_ids, p_values, color=color, marker='s')
+
+    for x, y in zip(query_ids, p_values):
+        plt.text(x, y + 0.02, f'{y:.4f}', ha='center', va='bottom', fontweight='bold')
+
+    plt.xlabel('Secret Query ID', fontweight='bold')
+    plt.ylabel(f'Precision @ {k}', fontweight='bold')
+    plt.title(f'{name}: Precision in Top {k} Results (Blind Evaluation)', fontweight='bold')
+    plt.ylim(0, 1.0)
+    plt.grid(True, axis='y', linestyle='--', alpha=0.5)
+
+    safe = name.replace(' ', '_')
+    plt.savefig(os.path.join(save_dir, f"blind_per_query_p_at_{k}_{safe}.png"), dpi=300, bbox_inches='tight')
+    plt.close()
+
 def plot_runtime(names, runtimes, colors, save_dir):
     values = [runtimes[name] for name in names]
 
